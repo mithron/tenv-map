@@ -50,11 +50,160 @@
         
 </head>
 <body>
-    <div id='map'> </div>
+    <div id='tenvmap'> </div>
     <script>
     require(['jquery', 'leaflet', 'leafletMarkerSpiderfier', 'leafletSearch', 'leafletGroupedLayers'], function($, L){
         $(document).ready(function(){
             var tenvel = new L.LayerGroup();
+            var vostorg = new L.LayerGroup();
+            var gaaza = new L.LayerGroup();
+            var david = new L.LayerGroup();
+            var outskirts = new L.LayerGroup();
+            var north = new L.LayerGroup();
+            
+            var mapGroups  = {
+                historicalLocation      : new L.LayerGroup(),
+                mysteryPOI              : new L.LayerGroup(),
+                fortification           : new L.LayerGroup(),
+                teslaTower              : new L.LayerGroup(),
+                surfacePOI              : new L.LayerGroup(),
+                
+                vostorgRoute            : new L.LayerGroup(),
+                gaazaRoute              : new L.LayerGroup(),
+                davidRoute              : new L.LayerGroup(),
+                raidersRoute            : new L.LayerGroup(),
+                smpRoute                : new L.LayerGroup()
+               
+               
+            };
+            
+            var POILayers           = new L.LayerGroup([ // Used by the search plugin only
+                mapGroups.historicalLocation,
+                mapGroups.mysteryPOI,
+                mapGroups.fortification,
+                mapGroups.teslaTower,
+                mapGroups.surfacePOI
+            ]);
+            
+            var groupsOffset     = {
+                historicalLocation  : 50000,
+                mysteryPOI          : 49950,
+                fortification       : 49900,
+                teslaTower          : 49000,
+                surfacePOI          : 20000
+               
+            };
+            
+            // Leaflet layers to category names
+            var categoriesToName = {
+                1   : 'historicalLocation',
+                2   : 'mysteryPOI',
+                3   : 'fortification',
+                4   : 'restrictedSectors',
+                5   : 'teslaTower',
+                6   : 'surfacePOI',
+            };
+            
+                        // POI Modal
+            var showModal = function(value){
+                if(value.options != undefined)
+                    value = value.options.values;
+                
+                var modal   = $('#poiModal');
+                var header  = modal.find('.modal-title').html('');
+                var body    = modal.find('.modal-body').html('');
+                var footer  = modal.find('.modal-footer').html('');
+                
+                header.html('')
+                                if(value.type != "davidRoute" && value.type != "vostorgRoute")
+                {
+                    header.html('<strong>' + value.name + '</strong><br />');
+                    footer.html('Coordinates:</strong> ' + value.coordinates[0] + ' / ' + value.coordinates[1] + ' / ' + value.coordinates[2]);
+                }
+                else
+                {
+                    if(value.type == 'region')
+                        header.html('<strong>' + value.name + ' (Region)</strong>');
+                    else
+                    {
+                            header.html('<strong>' + value.name + '</strong>');
+                    }
+                }
+                
+                $.getJSON("/data/json-description", {id: value.id}, function(data){
+                    body.html(data.html);
+                    modal.modal('show');
+                });
+            };
+            
+             // Main menu
+            var overlays = [
+                                {
+                    groupName : "Most prominent POIs",
+                    expanded  : true,
+                    layers    : { 
+                        "Historical location"        : mapGroups.historicalLocation,
+                        "Mystery POI"                : mapGroups.mysteryPOI,
+                        "Fortification"              : mapGroups.fortification,
+                        "Tesla tower"                : mapGroups.teslaTower,
+                        "Surface POI"                : mapGroups.surfacePOI
+                        
+                    }   
+                },
+                {
+                    groupName : "Routes",
+                    expanded  : True,
+                    layers    : { 
+                        "First route"                                   : mapGroups.vostorgRoute,
+                        "Gaaza route"                                   : mapGroups.gaazaRoute,
+                        "Camp David route"                              : mapGroups.davidRoute,
+                        "Raiders route"                                 : mapGroups.raidersRoute,
+                        "North channel route"                           : mapGroups.smpRoute
+                        
+                    }   
+                }
+                            
+                                                ,{
+                    groupName : "Options",
+                    expanded  : false,
+                    layers    : {
+                        "Tenvel" : tenvel, 
+                        "Vostorg" : vostorg,
+                        "Camp David" : david,
+                        "Gaaza" : gaaza,
+                        "Outer lands" : outskirts,
+                        "North" : north
+                        }
+                }
+          ];
+          
+            
+            // Generate map
+            var mainMap = L.map('tenvmap', {
+                minZoom             : 2,
+                maxZoom             : 7,
+                attributionControl  : false,
+                layers              : [
+                                                                                                    
+                    tenvel,
+                    vostorg,
+                    gaaza,
+                    david,
+                    outskirts,
+                    north
+                ]
+            });
+            
+            
+            var imageUrl = './images/maps/TNA_IR_128_3_231.png',
+                southWest = L.latLng(51.4528832, -2.5951183),
+                northEast = L.latLng(51.4558068, -2.5875938),
+                bounds = L.latLngBounds(southWest, northEast),
+                attributionText = "(c)Seldar";
+                
+            var tenvImage = L.imageOverlay(imageUrl, bounds, {attribution: attributionText}).addTo(mainMap);
+                        
+            
         })});
     </script>
 </body>
