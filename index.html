@@ -8,8 +8,14 @@
     <link href="/css/map.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Georgia" rel="stylesheet" type="text/css" />
         
-    <script src="/js/require.js" data-main="/js/includes.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     
+    <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+    
+    <link rel="stylesheet" href="/js/leaflet/leaflet.styledLayerControl.css" />
+    <link rel="stylesheet" href="/js/leaflet/leaflet.search.css" />
+  
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
@@ -50,16 +56,36 @@
         
 </head>
 <body>
-    <div id='tenvmap'> </div>
+    <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body" style="padding: 0;">
+                    <div id="tenvmap"></div>
+                </div>
+                <div class="panel-footer">
+                    <div class="text-right mouseCoords">Coordinates: </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <script src='js/leaflet/leaflet.markerspiderfier.js'></script>
+    <script src='js/leaflet/leaflet.styledLayerControl.js'></script>
+    <script src='js/leaflet/leaflet.search-src.js'></script>
     <script>
-    require(['jquery', 'leaflet', 'leafletMarkerSpiderfier', 'leafletSearch', 'leafletGroupedLayers'], function($, L){
         $(document).ready(function(){
+            
             var tenvel = new L.LayerGroup();
             var vostorg = new L.LayerGroup();
             var gaaza = new L.LayerGroup();
             var david = new L.LayerGroup();
+            var ventria = new L.LayerGroup();
+            var djins = new L.LayerGroup();
             var outskirts = new L.LayerGroup();
             var north = new L.LayerGroup();
+            var drawnData = new L.LayerGroup();
             
             var mapGroups  = {
                 historicalLocation      : new L.LayerGroup(),
@@ -67,6 +93,7 @@
                 fortification           : new L.LayerGroup(),
                 teslaTower              : new L.LayerGroup(),
                 surfacePOI              : new L.LayerGroup(),
+                blackStone              : new L.LayerGroup(),
                 
                 vostorgRoute            : new L.LayerGroup(),
                 gaazaRoute              : new L.LayerGroup(),
@@ -77,11 +104,12 @@
                
             };
             
-            var POILayers           = new L.LayerGroup([ // Used by the search plugin only
+            var POILayers = new L.LayerGroup([ // Used by the search plugin only
                 mapGroups.historicalLocation,
                 mapGroups.mysteryPOI,
                 mapGroups.fortification,
                 mapGroups.teslaTower,
+                mapGroups.blackStone,
                 mapGroups.surfacePOI
             ]);
             
@@ -90,7 +118,9 @@
                 mysteryPOI          : 49950,
                 fortification       : 49900,
                 teslaTower          : 49000,
-                surfacePOI          : 20000
+                blackStone          : 20000,
+                surfacePOI          : 0
+                
                
             };
             
@@ -101,7 +131,8 @@
                 3   : 'fortification',
                 4   : 'restrictedSectors',
                 5   : 'teslaTower',
-                6   : 'surfacePOI',
+                6   : 'blackStone',
+                17   : 'surfacePOI'
             };
             
                         // POI Modal
@@ -114,7 +145,6 @@
                 var body    = modal.find('.modal-body').html('');
                 var footer  = modal.find('.modal-footer').html('');
                 
-                header.html('')
                                 if(value.type != "davidRoute" && value.type != "vostorgRoute")
                 {
                     header.html('<strong>' + value.name + '</strong><br />');
@@ -129,14 +159,15 @@
                             header.html('<strong>' + value.name + '</strong>');
                     }
                 }
-                
-                $.getJSON("/data/json-description", {id: value.id}, function(data){
+                // TODO!
+                $.getJSON('/data/'+value.id + '.json', function(data) {
                     body.html(data.html);
                     modal.modal('show');
                 });
             };
             
-             // Main menu
+            
+            // Main menu
             var overlays = [
                                 {
                     groupName : "Most prominent POIs",
@@ -144,15 +175,16 @@
                     layers    : { 
                         "Historical location"        : mapGroups.historicalLocation,
                         "Mystery POI"                : mapGroups.mysteryPOI,
-                        "Fortification"              : mapGroups.fortification,
-                        "Tesla tower"                : mapGroups.teslaTower,
+                        "Fortifications"             : mapGroups.fortification,
+                        "Tesla towers"               : mapGroups.teslaTower,
+                        "Black Stones"               : mapGroups.blackStone,
                         "Surface POI"                : mapGroups.surfacePOI
                         
                     }   
                 },
                 {
                     groupName : "Routes",
-                    expanded  : True,
+                    expanded  : true,
                     layers    : { 
                         "First route"                                   : mapGroups.vostorgRoute,
                         "Gaaza route"                                   : mapGroups.gaazaRoute,
@@ -165,14 +197,9 @@
                             
                                                 ,{
                     groupName : "Options",
-                    expanded  : false,
+                    expanded  : true,
                     layers    : {
-                        "Tenvel" : tenvel, 
-                        "Vostorg" : vostorg,
-                        "Camp David" : david,
-                        "Gaaza" : gaaza,
-                        "Outer lands" : outskirts,
-                        "North" : north
+                        "Full image"    :  drawnData
                         }
                 }
           ];
@@ -180,31 +207,162 @@
             
             // Generate map
             var mainMap = L.map('tenvmap', {
-                minZoom             : 2,
-                maxZoom             : 7,
-                attributionControl  : false,
+                crs                 : L.CRS.Simple, 
+                minZoom             : -1,
+                maxZoom             : 4,
+                //attributionControl  : false,
                 layers              : [
                                                                                                     
-                    tenvel,
-                    vostorg,
-                    gaaza,
-                    david,
-                    outskirts,
-                    north
+                    drawnData
                 ]
             });
             
             
-            var imageUrl = './images/maps/TNA_IR_128_3_231.png',
-                southWest = L.latLng(51.4528832, -2.5951183),
-                northEast = L.latLng(51.4558068, -2.5875938),
-                bounds = L.latLngBounds(southWest, northEast),
+            var tenvBackUrl = '/img/map_back.png',
+                tenvAllUrl = 'img/map.png',
+                //southWest =  L.latLng(51.4528832, -2.5951183),
+                //northEast = L.latLng(51.4558068, -2.5875938),
+                bounds = [[0,0], [1000,1475]],
                 attributionText = "(c)Seldar";
                 
-            var tenvImage = L.imageOverlay(imageUrl, bounds, {attribution: attributionText}).addTo(mainMap);
-                        
+            var tenvBack = L.imageOverlay(tenvBackUrl, bounds, {attribution: attributionText}).addTo(mainMap);
             
-        })});
+            var tenvAll = L.imageOverlay(tenvAllUrl, bounds, {attribution: attributionText}).addTo(drawnData);  
+            
+            mainMap.fitBounds(bounds);
+                        
+           
+            
+            // Control layer
+            var layerControl = L.Control.styledLayerControl(null, overlays, {
+				container_width 	: "300px",
+				container_maxHeight : '600px',
+				group_maxHeight     : "300px"
+			});
+			
+            layerControl.addTo(mainMap);
+            
+            /*
+             // Spiderfier
+            var MarkerSpiderfier = new OverlappingMarkerSpiderfier(mainMap);
+            MarkerSpiderfier.addListener('click', function(marker){ showModal(marker); });
+            
+            MarkerSpiderfier.addListener('spiderfy', function (markers, other) {
+                //what happens when spiderify is triggered
+                other.forEach(function (non_selected_markers) {
+                    non_selected_markers.setOpacity(0.1);
+                });
+            });
+             MarkerSpiderfier.addListener('unspiderfy', function (markers, other) {
+                //what happens when spiderify is triggered
+                other.forEach(function(non_selected_markers) {
+                    non_selected_markers.setOpacity(1);
+                });
+            }); */
+           /* 
+            // Search control
+            L.control.search({
+                initial         : false,
+                casesensitive   : false,
+                
+                layer           : POILayers,
+                propertyName    : 'name',
+                filterData      : function(text, records) {
+                    if(text.length <= 2)
+                        return [];
+                    
+                    var frecords = {};
+                                        
+                    $.ajax({
+                        url: "/search",
+                        data: { query: text},
+                        async: false //TODO: Rewrite the search plugin to handle async filtering
+                    })
+                        .success(function(data) {
+                            for(var value in data)
+                            {
+                                if(data[value] in records)
+                                {
+                                    frecords[data[value]] = records[data[value]];
+                                }
+                            }
+                        });
+                    
+                    return frecords;
+                }
+        	})
+            .on('search:locationfound', function(e){
+                mainMap.addLayer(e.layer);
+        		e.layer.fireEvent('click');
+        	})
+        	.addTo(mainMap); */
+        	
+        	
+        	// Get galactic points
+            $.getJSON("/data/poiData.json", function(data){
+                $.each(data, function(key, value) {
+                      if(value.type != "route" && value.coordinates[0] != null) {
+                        
+                        var asset = L.marker(
+                            value.coordinates,
+                            {
+                                riseOnHover : true,
+                                riseOffset  : 60000,
+                                name        : value.name,
+                                type        : value.type,
+                                values      : value,
+                                zIndexOffset: groupsOffset[value.type]
+                            }
+                        );
+                        
+                        asset.bindTooltip(
+                                value.name,
+                                { direction: 'auto', pane: 'popupPane' }
+                            ).addTo(mapGroups[value.type]);
+                        MarkerSpiderfier.addMarker(asset);
+                    }
+                    else
+                    {
+                        if(value.type == 'route' && value.coordinates.length >= 2)
+                        {
+                            var dashArray   = '10, 10, 1, 10';
+                           
+                            var routeGroup  = new Array();
+                            var coordinates = new Array();
+                            
+                            for(i = 0; i < value.coordinates.length; i++)
+                            {
+                                var tmp = value.coordinates[i];
+                                
+                                coordinates.push(tmp);
+                                routeGroup.push(
+                                    L.circleMarker(tmp, { color: value.color, radius: 2, opacity: 0.9, fillOpacity: 0.8 })
+                                );
+                            }
+                            
+                            var line = L.polyline(coordinates,{ weight: 3, color: value.color, opacity: 0.5, fillOpacity: 0.2, dashArray: dashArray }).bindTooltip(
+                                    value.name, 
+                                    { direction: 'auto', pane: 'popupPane', sticky: true }
+                                ).on('click', function(){
+                                    showModal(value);
+                                });
+                                
+                            routeGroup.push(line);
+                            
+                            var asset = L.layerGroup(routeGroup);
+                                asset.addTo(mapGroups[value.type]);
+                        }
+                        
+                       
+                    }
+                });
+            });
+        	
+        	 
+           
+            
+            
+        });
     </script>
 </body>
 </html>
