@@ -4,7 +4,6 @@
     "name": "Суза",
     "size": 8,
     "searchName": "",
-    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
     "coordinates": [0,0]
 },
 {
@@ -13,7 +12,6 @@
     "name": "Нью-Хэвен",
     "size": 6,
     "searchName": "",
-    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
     "coordinates": [82,63]
 },
 {
@@ -22,8 +20,231 @@
     "name": "Хэвен",
     "size": 4,
     "searchName": "",
-    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
     "coordinates": [15,152.5]
+},
+{
+    "id": "4",
+    "type": "geoLocation",
+    "name": "Майнс",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [207,136]
+},
+{
+    "id": "5",
+    "type": "geoLocation",
+    "name": "Замок Чародеев",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [161,192]
+},
+{
+    "id": "6",
+    "type": "geoLocation",
+    "name": "Гааза",
+    "size": 10,
+    "searchName": "",
+    "coordinates": [0,-300]
+},
+{
+    "id": "7",
+    "type": "geoLocation",
+    "name": "Шлюзы",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [15,-184]
+},
+{
+    "id": "8",
+    "type": "geoLocation",
+    "name": "Замок Регентов",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [158,-49]
+},
+{
+    "id": "9",
+    "type": "geoLocation",
+    "name": "Открытая Гавань",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [21,-309]
+},
+{
+    "id": "10",
+    "type": "geoLocation",
+    "name": "Замок Отранто",
+    "size": 1,
+    "searchName": "",
+    "coordinates": [-69.6,-259]
+},
+{
+    "id": "11",
+    "type": "geoLocation",
+    "name": "Сплит",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-116.4,-206.8]
+},
+{
+    "id": "12",
+    "type": "geoLocation",
+    "name": "Развилок",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-53.5,107]
+},
+{
+    "id": "13",
+    "type": "geoLocation",
+    "name": "Рейнис",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-157.6,133.6]
+},
+{
+    "id": "14",
+    "type": "geoLocation",
+    "name": "Восторг",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-231.5,218.5]
+},
+{
+    "id": "15",
+    "type": "geoLocation",
+    "name": "Речной порт",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-264.7,67.7]
+},
+{
+    "id": "16",
+    "type": "geoLocation",
+    "name": "Тюрьма Брисбен",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-277.6,214.2]
+},
+{
+    "id": "17",
+    "type": "geoLocation",
+    "name": "Развалины Таверны",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-279.4,245.7]
+},
+{
+    "id": "18",
+    "type": "geoLocation",
+    "name": "Развалины ЗКП Азаг",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-323.9,264.3]
+},
+{
+    "id": "19",
+    "type": "geoLocation",
+    "name": "Стан Кочевников",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-184,296.25]
+},
+{
+    "id": "20",
+    "type": "geoLocation",
+    "name": "Корабль",
+    "size": 2,
+    "searchName": "",
+    "coordinates": [-331.5,313]
+},
+{
+    "id": "21",
+    "type": "geoLocation",
+    "name": "Супернова Шахты",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-404.7,285.3]
+},
+{
+    "id": "22",
+    "type": "geoLocation",
+    "name": "Феникс",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-425.5,211]
+},
+{
+    "id": "23",
+    "type": "geoLocation",
+    "name": "Вентрия",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-531,46]
+},
+{
+    "id": "24",
+    "type": "geoLocation",
+    "name": "Фермы",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-440,256.6]
+},
+{
+    "id": "25",
+    "type": "geoLocation",
+    "name": "Фермы",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-481,282]
+},
+{
+    "id": "26",
+    "type": "geoLocation",
+    "name": "Шахты",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-516,196]
+},
+{
+    "id": "27",
+    "type": "geoLocation",
+    "name": "проход",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-522,218]
+},
+{
+    "id": "28",
+    "type": "geoLocation",
+    "name": "Крипта",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-563.5,315.7]
+},
+{
+    "id": "29",
+    "type": "geoLocation",
+    "name": "Переправа",
+    "size": 2,
+    "searchName": "",
+    "coordinates": [-51,247.5]
+},
+{
+    "id": "30",
+    "type": "geoLocation",
+    "name": "Ферма",
+    "size": 2,
+    "searchName": "",
+    "coordinates": [-57,273.5]
+},
+{
+    "id": "31",
+    "type": "geoLocation",
+    "name": "Останки Техники",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-64.2,346.5]
 }
 
 ]
