@@ -1,0 +1,26 @@
+[{
+    "id": "1",
+    "type": "geoLocation",
+    "name": "Суза",
+    "searchName": "",
+    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
+    "coordinates": [0,0]
+},
+{
+    "id": "2",
+    "type": "geoLocation",
+    "name": "Нью-Хэвен",
+    "searchName": "",
+    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
+    "coordinates": [82,63]
+},
+{
+    "id": "3",
+    "type": "geoLocation",
+    "name": "Хэвен",
+    "searchName": "",
+    "Url": "https:\/\/tenvel.mosrpg.ru\/location\/id\/1",
+    "coordinates": [15,152.5]
+}
+
+]

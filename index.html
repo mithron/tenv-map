@@ -42,7 +42,7 @@
     <meta property="og:url" content="tenvel.mosrpg.ru" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Tenvel map" />
-    <meta property="og:description" content="Tenvel map to poing out." />
+    <meta property="og:description" content="Tenvel RPG world map for easy editing and access to POI." />
     <meta property="og:image" content="http://tenvel.mosrpg.ru/android-chrome-192x192.png" />
     
             <link rel="alternate" href="http://tenvel.mosrpg.ru/" hreflang="en" />
@@ -88,7 +88,7 @@
             var drawnData = new L.LayerGroup();
             
             var mapGroups  = {
-                historicalLocation      : new L.LayerGroup(),
+                geoLocation      : new L.LayerGroup(),
                 mysteryPOI              : new L.LayerGroup(),
                 fortification           : new L.LayerGroup(),
                 teslaTower              : new L.LayerGroup(),
@@ -105,7 +105,7 @@
             };
             
             var POILayers = new L.LayerGroup([ // Used by the search plugin only
-                mapGroups.historicalLocation,
+                mapGroups.geoLocation,
                 mapGroups.mysteryPOI,
                 mapGroups.fortification,
                 mapGroups.teslaTower,
@@ -114,10 +114,10 @@
             ]);
             
             var groupsOffset     = {
-                historicalLocation  : 50000,
-                mysteryPOI          : 49950,
-                fortification       : 49900,
-                teslaTower          : 49000,
+                geoLocation         : 50000,
+                mysteryPOI          : 49000,
+                fortification       : 48000,
+                teslaTower          : 30000,
                 blackStone          : 20000,
                 surfacePOI          : 0
                 
@@ -126,7 +126,7 @@
             
             // Leaflet layers to category names
             var categoriesToName = {
-                1   : 'historicalLocation',
+                1   : 'geoLocation',
                 2   : 'mysteryPOI',
                 3   : 'fortification',
                 4   : 'restrictedSectors',
@@ -173,7 +173,7 @@
                     groupName : "Most prominent POIs",
                     expanded  : true,
                     layers    : { 
-                        "Historical location"        : mapGroups.historicalLocation,
+                        "Geo location"               : mapGroups.geoLocation,
                         "Mystery POI"                : mapGroups.mysteryPOI,
                         "Fortifications"             : mapGroups.fortification,
                         "Tesla towers"               : mapGroups.teslaTower,
@@ -209,7 +209,7 @@
             var mainMap = L.map('tenvmap', {
                 crs                 : L.CRS.Simple, 
                 minZoom             : -1,
-                maxZoom             : 4,
+                maxZoom             : 2,
                 //attributionControl  : false,
                 layers              : [
                                                                                                     
@@ -222,8 +222,8 @@
                 tenvAllUrl = 'img/map.png',
                 //southWest =  L.latLng(51.4528832, -2.5951183),
                 //northEast = L.latLng(51.4558068, -2.5875938),
-                bounds = [[0,0], [1000,1475]],
-                attributionText = "(c)Seldar";
+                bounds = [[-576,-421.5], [424,1053.5]],
+                attributionText = "Drawn by Seldar, Data by EnterVit";
                 
             var tenvBack = L.imageOverlay(tenvBackUrl, bounds, {attribution: attributionText}).addTo(mainMap);
             
@@ -231,18 +231,20 @@
             
             mainMap.fitBounds(bounds);
                         
-           
+            mainMap.on("mousemove", function(e) {
+                    $('.mouseCoords').html('Coordinates: x: ' + e.latlng.lng + ' y: '+ e.latlng.lat);
+                });
             
             // Control layer
             var layerControl = L.Control.styledLayerControl(null, overlays, {
-				container_width 	: "300px",
+				container_maxWidth 	: "300px",
 				container_maxHeight : '600px',
 				group_maxHeight     : "300px"
 			});
 			
             layerControl.addTo(mainMap);
             
-            /*
+            
              // Spiderfier
             var MarkerSpiderfier = new OverlappingMarkerSpiderfier(mainMap);
             MarkerSpiderfier.addListener('click', function(marker){ showModal(marker); });
@@ -258,7 +260,8 @@
                 other.forEach(function(non_selected_markers) {
                     non_selected_markers.setOpacity(1);
                 });
-            }); */
+            }); 
+            
            /* 
             // Search control
             L.control.search({
@@ -291,7 +294,7 @@
                     return frecords;
                 }
         	})
-            .on('search:locationfound', function(e){
+            .on('search:geoLocationfound', function(e){
                 mainMap.addLayer(e.layer);
         		e.layer.fireEvent('click');
         	})
@@ -299,7 +302,7 @@
         	
         	
         	// Get galactic points
-            $.getJSON("/data/poiData.json", function(data){
+            $.getJSON("/data/worldData.json", function(data){
                 $.each(data, function(key, value) {
                       if(value.type != "route" && value.coordinates[0] != null) {
                         
@@ -357,11 +360,6 @@
                     }
                 });
             });
-        	
-        	 
-           
-            
-            
         });
     </script>
 </body>
