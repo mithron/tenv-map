@@ -186,7 +186,7 @@
                     groupName : "Routes",
                     expanded  : true,
                     layers    : { 
-                        "First route"                                   : mapGroups.vostorgRoute,
+                        "Vostorg route"                                   : mapGroups.vostorgRoute,
                         "Gaaza route"                                   : mapGroups.gaazaRoute,
                         "Camp David route"                              : mapGroups.davidRoute,
                         "Raiders route"                                 : mapGroups.raidersRoute,
@@ -204,12 +204,33 @@
                 }
           ];
           
+            // POI Icons
+            var iconsDefault            = {
+            //    iconSize: [20, 20],
+           //     iconAnchor: [12, 36],
+                tooltipAnchor: [6, -18],
+                popupAnchor: [1, -36],
+            //    shadowUrl: '/img/icons/marker-shadow.png',
+            //    shadowSize: [41, 41],
+            //    shadowAnchor: [12, 41]
+            };
+            
+            var markerIcons = {
+                geoLocation: $.extend({
+                //    iconSize: [15, 15],
+                    iconUrl: '/img/icons/cityMarker.png',
+                    iconRetinaUrl: '/img/icons/cityMarker.png'
+                }, iconsDefault) }
             
             // Generate map
             var mainMap = L.map('tenvmap', {
                 crs                 : L.CRS.Simple, 
+                zoomSnap            : 0.1,
+                zoomDelta           : 0.2,
                 minZoom             : -1,
                 maxZoom             : 2,
+                center: [0, 0],
+                zoom: 2,
                 //attributionControl  : false,
                 layers              : [
                                                                                                     
@@ -220,9 +241,10 @@
             
             var tenvBackUrl = '/img/map_back.png',
                 tenvAllUrl = 'img/map.png',
-                //southWest =  L.latLng(51.4528832, -2.5951183),
-                //northEast = L.latLng(51.4558068, -2.5875938),
-                bounds = [[-576,-421.5], [424,1053.5]],
+                southWest =  [-576,-421.5],
+                northEast = [424,1053.5],
+                bounds = [southWest,northEast],
+                maxBounds = [southWest, [471,1053.5]],
                 attributionText = "Drawn by Seldar, Data by EnterVit";
                 
             var tenvBack = L.imageOverlay(tenvBackUrl, bounds, {attribution: attributionText}).addTo(mainMap);
@@ -230,6 +252,8 @@
             var tenvAll = L.imageOverlay(tenvAllUrl, bounds, {attribution: attributionText}).addTo(drawnData);  
             
             mainMap.fitBounds(bounds);
+            
+           // mainMap.setMaxBounds(maxBounds);
                         
             mainMap.on("mousemove", function(e) {
                     $('.mouseCoords').html('Coordinates: x: ' + e.latlng.lng + ' y: '+ e.latlng.lat);
@@ -300,15 +324,21 @@
         	})
         	.addTo(mainMap); */
         	
+        	mainMap.flyTo([0,0], 1);
         	
         	// Get galactic points
             $.getJSON("/data/worldData.json", function(data){
                 $.each(data, function(key, value) {
+                    
+                      var customIcon = L.icon($.extend({iconSize: [11+value.size,11+value.size]},
+                                            markerIcons[value.type]));
+                     
                       if(value.type != "route" && value.coordinates[0] != null) {
                         
                         var asset = L.marker(
                             value.coordinates,
                             {
+                                icon: customIcon,
                                 riseOnHover : true,
                                 riseOffset  : 60000,
                                 name        : value.name,
