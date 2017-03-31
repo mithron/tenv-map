@@ -77,6 +77,9 @@
     <script>
         $(document).ready(function(){
             
+            var backs = { 
+                    
+                    }
             var tenvel = new L.LayerGroup();
             var vostorg = new L.LayerGroup();
             var gaaza = new L.LayerGroup();
@@ -94,6 +97,7 @@
                 teslaTower              : new L.LayerGroup(),
                 surfacePOI              : new L.LayerGroup(),
                 blackStone              : new L.LayerGroup(),
+                
                 
                 vostorgRoute            : new L.LayerGroup(),
                 gaazaRoute              : new L.LayerGroup(),
@@ -145,14 +149,14 @@
                 var body    = modal.find('.modal-body').html('');
                 var footer  = modal.find('.modal-footer').html('');
                 
-                                if(value.type != "davidRoute" && value.type != "vostorgRoute")
+                                if(value.layerGroup != "davidRoute" && value.layerGroup != "vostorgRoute")
                 {
                     header.html('<strong>' + value.name + '</strong><br />');
                     footer.html('Coordinates:</strong> ' + value.coordinates[0] + ' / ' + value.coordinates[1] + ' / ' + value.coordinates[2]);
                 }
                 else
                 {
-                    if(value.type == 'region')
+                    if(value.layerGroup == 'region')
                         header.html('<strong>' + value.name + ' (Region)</strong>');
                     else
                     {
@@ -207,9 +211,9 @@
             // POI Icons
             var iconsDefault            = {
             //    iconSize: [20, 20],
-           //     iconAnchor: [12, 36],
-                tooltipAnchor: [6, -18],
-                popupAnchor: [1, -36],
+            //    iconAnchor: [2, 2],
+                tooltipAnchor: [2, 2],
+                popupAnchor: [1, 1],
             //    shadowUrl: '/img/icons/marker-shadow.png',
             //    shadowSize: [41, 41],
             //    shadowAnchor: [12, 41]
@@ -331,9 +335,9 @@
                 $.each(data, function(key, value) {
                     
                       var customIcon = L.icon($.extend({iconSize: [11+value.size,11+value.size]},
-                                            markerIcons[value.type]));
+                                            markerIcons[value.layerGroup]));
                      
-                      if(value.type != "route" && value.coordinates[0] != null) {
+                      if(value.layerGroup != "route" && value.coordinates[0] != null) {
                         
                         var asset = L.marker(
                             value.coordinates,
@@ -342,21 +346,21 @@
                                 riseOnHover : true,
                                 riseOffset  : 60000,
                                 name        : value.name,
-                                type        : value.type,
+                                type        : value.layerGroup,
                                 values      : value,
-                                zIndexOffset: groupsOffset[value.type]
+                                zIndexOffset: groupsOffset[value.layerGroup]
                             }
                         );
                         
                         asset.bindTooltip(
                                 value.name,
                                 { direction: 'auto', pane: 'popupPane' }
-                            ).addTo(mapGroups[value.type]);
+                            ).addTo(mapGroups[value.layerGroup]);
                         MarkerSpiderfier.addMarker(asset);
                     }
                     else
                     {
-                        if(value.type == 'route' && value.coordinates.length >= 2)
+                        if(value.layerGroup == 'route' && value.coordinates.length >= 2)
                         {
                             var dashArray   = '10, 10, 1, 10';
                            
@@ -383,7 +387,7 @@
                             routeGroup.push(line);
                             
                             var asset = L.layerGroup(routeGroup);
-                                asset.addTo(mapGroups[value.type]);
+                                asset.addTo(mapGroups[value.layerGroup]);
                         }
                         
                        
