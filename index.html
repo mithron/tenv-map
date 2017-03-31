@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     
     <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    
     <link href="/css/map.css" rel="stylesheet" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Georgia" rel="stylesheet" type="text/css" />
         
@@ -12,6 +13,9 @@
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     
     <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
     <link rel="stylesheet" href="/js/leaflet/leaflet.styledLayerControl.css" />
     <link rel="stylesheet" href="/js/leaflet/leaflet.search.css" />
@@ -144,25 +148,14 @@
                 if(value.options != undefined)
                     value = value.options.values;
                 
-                var modal   = $('#poiModal');
+                var modal   = $('#mapModal');
                 var header  = modal.find('.modal-title').html('');
                 var body    = modal.find('.modal-body').html('');
                 var footer  = modal.find('.modal-footer').html('');
                 
-                                if(value.layerGroup != "davidRoute" && value.layerGroup != "vostorgRoute")
-                {
-                    header.html('<strong>' + value.name + '</strong><br />');
-                    footer.html('Coordinates:</strong> ' + value.coordinates[0] + ' / ' + value.coordinates[1] + ' / ' + value.coordinates[2]);
-                }
-                else
-                {
-                    if(value.layerGroup == 'region')
-                        header.html('<strong>' + value.name + ' (Region)</strong>');
-                    else
-                    {
-                            header.html('<strong>' + value.name + '</strong>');
-                    }
-                }
+                header.html('<strong>' + value.name + '</strong><br />');
+                footer.html('Coordinates:</strong> ' + value.coordinates[1] + ', ' + value.coordinates[0]);
+                
                 // TODO!
                 $.getJSON('/data/'+value.id + '.json', function(data) {
                     body.html(data.html);
@@ -396,5 +389,19 @@
             });
         });
     </script>
+    <div class="modal fade" tabindex="-1" role="dialog" id="mapModal">
+       <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+    
 </body>
 </html>
