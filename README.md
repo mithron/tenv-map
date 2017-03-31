@@ -6,7 +6,7 @@ Uses LeafletJS with plugins:
 * StyledLayerControl
 * OverlappingMarkerSpiderfier
 
-Heavily inspired by https://edsm.net .
+Heavily inspired by [Elite: Dangerous Star Map ](https://edsm.net/en/galactic-mapping) .
 
 ##Usage##
 Fork to your account. Use github pages for serving. 
