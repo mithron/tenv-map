@@ -5,6 +5,7 @@ Prototype map for rpg tabletop. World is vaguelly based on SpellBinders series.
 Uses LeafletJS with plugins: 
 * StyledLayerControl
 * OverlappingMarkerSpiderfier
+* probably others
 
 Heavily inspired by [Elite: Dangerous Star Map ](https://edsm.net/en/galactic-mapping) .
 

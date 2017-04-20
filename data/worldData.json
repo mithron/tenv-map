@@ -2,7 +2,7 @@
     "id": "1",
     "layerGroup": "geoLocation",
     "name": "Суза",
-    "size": 8,
+    "size": 9,
     "searchName": "",
     "coordinates": [0,0]
 },
@@ -26,7 +26,7 @@
     "id": "4",
     "layerGroup": "geoLocation",
     "name": "Майнс",
-    "size": 6,
+    "size": 8,
     "searchName": "",
     "coordinates": [207,136]
 },
@@ -245,6 +245,78 @@
     "size": 3,
     "searchName": "",
     "coordinates": [-64.2,346.5]
+},
+{
+    "id": "32",
+    "layerGroup": "geoLocation",
+    "name": "Альхазред",
+    "size": 5,
+    "searchName": "",
+    "coordinates": [-540,798.5]
+},
+{
+    "id": "33",
+    "layerGroup": "geoLocation",
+    "name": "Тампа",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-422.5,756.5]
+},
+{
+    "id": "34",
+    "layerGroup": "geoLocation",
+    "name": "Башня",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-205,741.5]
+},
+{
+    "id": "35",
+    "layerGroup": "geoLocation",
+    "name": "Завод",
+    "size": 3,
+    "searchName": "",
+    "coordinates": [-223,739]
+},
+{
+    "id": "36",
+    "layerGroup": "geoLocation",
+    "name": "Ярва",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-71,682.5]
+},
+{
+    "id": "37",
+    "layerGroup": "geoLocation",
+    "name": "Лестер",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-6.5,685]
+},
+{
+    "id": "38",
+    "layerGroup": "geoLocation",
+    "name": "Олбани",
+    "size": 5,
+    "searchName": "",
+    "coordinates": [-66.5,774]
+},
+{
+    "id": "39",
+    "layerGroup": "geoLocation",
+    "name": "Форт",
+    "size": 6,
+    "searchName": "",
+    "coordinates": [-53.5,872.5]
+},
+{
+    "id": "39",
+    "layerGroup": "geoLocation",
+    "name": "Аэродром",
+    "size": 4,
+    "searchName": "",
+    "coordinates": [-87.5,915.5]
 }
 
 ]

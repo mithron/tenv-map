@@ -353,7 +353,7 @@
                         
                         asset.bindTooltip(
                                 value.name,
-                                { direction: 'auto', pane: 'popupPane' }
+                                { direction: 'auto', pane: 'popupPane', permanent: true, opacity: 0.3 }
                             ).addTo(mapGroups[value.layerGroup]);
                         MarkerSpiderfier.addMarker(asset);
                     }
